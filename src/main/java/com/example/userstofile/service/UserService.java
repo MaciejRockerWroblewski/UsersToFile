@@ -3,18 +3,23 @@ package com.example.userstofile.service;
 import com.example.userstofile.api.model.User;
 import com.example.userstofile.repository.UserEntity;
 import com.example.userstofile.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Service
+@RequiredArgsConstructor
 public class UserService {
 
 
     private final UserRepository repository;
 
-    public UserService(UserRepository repository) {
-        this.repository = repository;
-    }
+  // public UserService(UserRepository repository) {
+  //     this.repository = repository;
+   // }
 
 
     public void create(User user) {

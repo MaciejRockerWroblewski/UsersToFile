@@ -1,8 +1,9 @@
 package com.example.userstofile.repository;
 
-import lombok.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,26 +16,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Repository
 public class UserRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRepository.class);
 
     private String userFilePath;
 
-    public UserRepository(@Value("${file.path.user}") String userFilePath) {
+    public UserRepository(@Value("${file.path.users}") String userFilePath) {
         this.userFilePath = userFilePath;
     }
 
     public void save(UserEntity user) {
         List<UserEntity> allUsers = readFromFile();
         if (user.getId() == null){
-            long currentMaxId = allUsers.stream().mapToLong(mat -> mat.getId()).max().orElse(0L);
+            long currentMaxId = allUsers.stream().mapToLong(UserEntity::getId).max().orElse(0L);
             user.setId(++currentMaxId);
         } else{
             allUsers.removeIf(ent -> ent.getId().equals(user.getId()));
         }
         allUsers.add(user);
-        storeInFile(user);
+        storeInFile((List<UserEntity>) user);
 
     }
 
